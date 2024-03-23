@@ -13,6 +13,22 @@ export default async function SnippetsShowPage ( props: ShowPageProps ) {
 
   const snippet = await db.snippet.findFirst({
     where: { id: parseInt(props.params.id) },
-  });
-    return snippet ? <h1>Snippet page</h1> : notFound();
+  } );
+    
+    const snippetComponent = (snip: any) =>
+    {
+        return (
+            <div className="flex m-4 justify-between items-center">
+                <h1 className="text-xl font-bold">{ snip.title }</h1> 
+                <div>
+                    <button className="p-2 border rounded">Edit</button>
+                    <button className="p-2 border rounded">Delete</button>
+                </div>
+                <pre className="p-4 border rounded bg-gray-200 border-gray-200">
+                   {snippet ? <code>{snippet.code}</code> : "No Code at this moment"}
+                </pre>
+          </div> 
+       )
+    }
+    return snippet ? snippetComponent(snippet) : notFound();
 }
