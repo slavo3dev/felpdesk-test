@@ -1,7 +1,8 @@
 'use client'
-import { use, useState } from "react";
+import { useState } from "react";
 import { SnippetProps } from "@/lib/interfaces"
 import { Editor } from "@monaco-editor/react"
+import { editSnippet } from "@/actions"
 interface SnippetEditProps
 {
     snippet: SnippetProps
@@ -12,9 +13,10 @@ export default function SnippetEditForm ( { snippet }: SnippetEditProps  ) {
 
     const handleEditorOnChange = (value: string = "") =>
     {
-       console.log(value)
-       setCode(value)
+       setCode( value )
     }
+
+    const editSinppetAction = editSnippet.bind(null, snippet.id, code)
 
     return (
       <div>
@@ -27,6 +29,9 @@ export default function SnippetEditForm ( { snippet }: SnippetEditProps  ) {
                 options={ { minimap: { enable: false } } }
                 onChange={handleEditorOnChange}
             />
+            <form action={editSinppetAction}>
+                <button type="submit" className="p-2 border rounded">Save</button>
+            </form>
      </div>
 )
      
