@@ -1,28 +1,14 @@
+'use client';
+import { createSnnipet } from "@/actions";
+import { useFormState } from "react-dom";
 
-import { db } from "@/db";
-import { redirect } from "next/navigation";
 export default function SnnipetCreatePage ()
 {
     
-  async function createSnnipet(formData: FormData) {
-      'use server'; 
-
-      const title = formData.get( 'title' ) as string
-      const code = formData.get( 'code' ) as string
-      
-     const snnipet = await db.snippet.create({
-      data: {
-        title,
-        code,
-      },
-    });
-      console.log(snnipet)
-      redirect("/")
-  }
-    
+  const [ formState, action ] = useFormState( createSnnipet, { message: "" } )  
     
   return (
-    <form action={createSnnipet}>
+    <form action={action}>
       <h3 className="font-bold m-3">Create a Snnipet</h3>
       <div className="flex flex-col gap-4">
         <div className="flex gap-4">
@@ -46,7 +32,8 @@ export default function SnnipetCreatePage ()
             id="code"
           />
         </div>
-
+        
+       {formState.message ? <div className="m-2 p-2 bg-red-200 border rounded border-red-400">{formState.message}</div> : null}
         <button type="submit" className="rounded p-2 bg-blue-200">
           Create
         </button>
