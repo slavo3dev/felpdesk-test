@@ -23,30 +23,40 @@ export async function deleteSnippet(id: number) {
 
 export async function createSnnipet ( formState: { message: string}, formData: FormData) {
     
-    const title = formData.get( 'title' )
-    const code = formData.get( 'code' ) 
-    
-    if ( typeof title !== 'string' || title.length < 5 ) { 
+    try {
+        const title = formData.get( 'title' )
+        const code = formData.get( 'code' ) 
 
-        return {
-            message: "Title must be at least 5 characters long"
+        if ( typeof title !== 'string' || title.length < 5 ) { 
+            return {
+                message: "Title must be at least 5 characters long"
+            }
         }
-    
-    }
 
-    if (typeof code !== 'string' || code.length < 10) {
-        
-        return {
-            message: "Code must be at least 10 characters long"
+        if (typeof code !== 'string' || code.length < 10) {
+            return {
+                message: "Code must be at least 10 characters long"
+            }
+        }
+
+        await db.snippet.create({
+            data: {
+                    title,
+                    code,
+                },
+        });
+    
+    } catch (error: unknown) {
+        if ( error instanceof Error ) {
+            return {
+                message: error.message
+            }
+        } else {
+            return {
+                message: "An unknown error occurred"
+            }
         }
     }
-
-    const snnipet = await db.snippet.create({
-      data: {
-        title,
-        code,
-      },
-    });
-      console.log(snnipet)
+    
       redirect("/")
   }
