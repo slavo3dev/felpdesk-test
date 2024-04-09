@@ -58,5 +58,5 @@ export async function createSnnipet ( formState: { message: string}, formData: F
         }
     }
     
-      redirect("/")
+    redirect( "/" )
   }
